@@ -9,6 +9,7 @@ import { TasksComponent } from './tasks/tasks.component';
 import { TaskComponent } from './tasks/task/task.component';
 import { NewTaskComponent } from './new-task/new-task.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     TasksComponent,
     TaskComponent,
     NewTaskComponent,
+    HomeComponent,
   ],
   imports: [
     ReactiveFormsModule,
