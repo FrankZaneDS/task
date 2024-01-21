@@ -33,6 +33,7 @@ export class NewTaskComponent implements OnInit {
     this.task.disc = this.reactiveForm.value.disc;
     console.log(this.task.title, this.task.disc);
     this.tasks.push(this.task);
+    this.reactiveForm.reset();
   }
   constructor(private dataServices: DataServices) {}
 }
