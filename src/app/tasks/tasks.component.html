@@ -1,0 +1,101 @@
+<div class="container">
+  <tabset>
+    <tab heading="All Tasks" id="tab1">
+      <ng-container *ngFor="let task of tasks; let i = index">
+        <div class="card mt-1" style="width: 30rem">
+          <div class="card-body">
+            <h5 class="card-title">{{ task.title }}</h5>
+            <p class="card-text">
+              {{ task.disc }}
+            </p>
+            <div class="d-flex justify-content-between">
+              <button
+                [disabled]="task.done"
+                type="button"
+                class="btn btn-success"
+                (click)="doneTask(i)"
+              >
+                Done
+              </button>
+              <a
+                href="#"
+                [routerLink]="'/new-task/' + i"
+                class="btn btn-primary"
+                >Edit</a
+              >
+              <button
+                type="button"
+                class="btn btn-danger"
+                (click)="deleteItem(i)"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div></ng-container
+      ></tab
+    >
+    <tab heading="To Do">
+      <ng-container *ngFor="let task of tasks; let i = index"
+        ><div
+          class="card mt-1"
+          style="width: 30rem"
+          *ngIf="task.done === false"
+        >
+          <div class="card-body">
+            <h5 class="card-title">{{ task.title }}</h5>
+            <p class="card-text">
+              {{ task.disc }}
+            </p>
+            <div class="d-flex justify-content-between">
+              <button
+                [disabled]="task.done"
+                type="button"
+                class="btn btn-success"
+                (click)="doneTask(i)"
+              >
+                Done
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                (click)="deleteItem(i)"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div></ng-container
+      ></tab
+    >
+    <tab heading="Done"
+      ><ng-container *ngFor="let task of tasks; let i = index">
+        <div *ngIf="task.done === true" class="card mt-1" style="width: 30rem">
+          <div class="card-body">
+            <h5 class="card-title">{{ task.title }}</h5>
+            <p class="card-text">
+              {{ task.disc }}
+            </p>
+            <div class="d-flex justify-content-between">
+              <button
+                [disabled]="task.done"
+                type="button"
+                class="btn btn-success"
+                (click)="doneTask(i)"
+              >
+                Done
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                (click)="deleteItem(i)"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </tab>
+  </tabset>
+</div>
