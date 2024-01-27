@@ -3,6 +3,7 @@ import { Task } from '../data.service';
 import { DataServices } from '../data.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-new-task',
@@ -10,7 +11,8 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
   styleUrl: './new-task.component.css',
 })
 export class NewTaskComponent implements OnInit {
-  tasks = this.dataServices.tasks;
+  tasks$ = this.dataServices.tasks$;
+  title$ = new BehaviorSubject<string>('title');
   // editTitle: string = '';
   // editDisc: string = '';
   reactiveForm: FormGroup;
@@ -23,10 +25,14 @@ export class NewTaskComponent implements OnInit {
   //   done: false,
   //   id: this.i,
   // };
+
   replaceTask(index, task: Task) {
-    this.tasks.splice(this.index, 1, task);
+    const tasks = this.tasks$.getValue();
+    const newTasks = tasks.splice(this.index, 1, task);
+    this.tasks$.next(newTasks);
   }
   onSubmit() {
+    if (this.reactiveForm.invalid) return;
     let task: Task = {
       title: '',
       disc: '',
@@ -48,7 +54,8 @@ export class NewTaskComponent implements OnInit {
 
       task.id = this.i++;
       console.log(task.title, task.disc);
-      this.tasks.push(task);
+      //dodaj prethodnu vrednost liste + novi task
+      this.tasks$.next([...this.tasks$.getValue(), task]);
       this.i++;
       this.reactiveForm.reset();
       console.log(task.id);
@@ -65,16 +72,17 @@ export class NewTaskComponent implements OnInit {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
+    this.title$.next(this.createOrEditTask());
     this.index = +this.activatedRoute.snapshot.params['id'];
     if (Number.isFinite(this.index) === true) {
       this.reactiveForm = new FormGroup({
         title: new FormControl(
-          this.tasks[this.index].title,
+          this.tasks$.getValue()[this.index]?.title,
           Validators.required
         ),
-        disc: new FormControl(this.tasks[this.index].disc, Validators.required),
+        disc: new FormControl(this.tasks$.getValue()[this.index]?.disc, Validators.required),
         done: new FormControl(false),
-        id: new FormControl(this.index),
+        id: new FormControl(this.index ? this.index : this.i),
       });
     } else {
       this.reactiveForm = new FormGroup({
@@ -97,5 +105,14 @@ export class NewTaskComponent implements OnInit {
         this.reactiveForm.reset();
       }
     });
+  }
+
+  createOrEditTask(): string {
+    console.log('pokrenuto');
+    const index = +this.activatedRoute.snapshot.params['id'];
+    if (Number.isInteger(index)) {
+      return 'Edit Task!';
+    }
+    return 'Create new task!';
   }
 }

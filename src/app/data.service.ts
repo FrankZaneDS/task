@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class DataServices {
-  tasks: Task[] = [
+  tasks$: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>([]);
     // {
     //   title: 'Task1',
     //   disc: 'Be Smarter, sfgiadfljgapodigjadpigljadkfg',
@@ -36,7 +36,7 @@ export class DataServices {
     //   id: 5,
     //   done: false,
     // },
-  ];
+  // ];
 }
 export interface Task {
   title: string;
